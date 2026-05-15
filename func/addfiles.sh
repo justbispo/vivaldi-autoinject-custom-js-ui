@@ -18,7 +18,7 @@ addfiles() {
   
   for f in "${files[@]}"; do
     printf -v str '<script src="%s"></script>' "${f##*/}"
-    cp -f "$f" "$_browser_html"
+    cp -f "$f" "$_vivaldi_directory/${f##*/}"
 
     # files passed as arguments overwrites existing
     # files in /usr/share/vivaldi-UI-js
