@@ -26,14 +26,15 @@ main() {
   _vivaldi_directory=${_vivaldi%/*}/resources/vivaldi
 
   _vivaldi_version=$("$_vivaldi" --version 2>/dev/null)
-  IFS=. read -rs major minor _ <<< "${_vivaldi_version//[^0-9.]/}"
+  _major_minor=$(echo "$_vivaldi_version" | grep -oE '[0-9]+\.[0-9]+' | head -1)
 
-  if ((major >= 6 && minor >= 2))
-    then _browser_html=$_vivaldi_directory/window.html
-    else _browser_html=$_vivaldi_directory/browser.html
+  if [ "$(printf '%s\n' "6.2" "$_major_minor" | sort -V | tail -1)" = "$_major_minor" ] && [ "$_major_minor" != "6.2" ]; then
+    _browser_html=$_vivaldi_directory/window.html
+  else
+    _browser_html=$_vivaldi_directory/browser.html
   fi
 
-  unset _vivaldi_version major minor
+  unset _vivaldi_version _major_minor
 
   [[ -f $_browser_html ]] || ERX \
     "could not find $_browser_html, is vivaldi installed?"
